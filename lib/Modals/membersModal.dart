@@ -1,7 +1,10 @@
 class Member {
   String _name;
   String _objectId;
-  Member(this._name, this._objectId);
+  Member({String name, String objectId}) {
+    this._name = name;
+    this._objectId = objectId;
+  }
   Member.fromJson(Map<String, dynamic> jsonObject) {
     _name = jsonObject["Name"].toString();
     _objectId = jsonObject["objectId"].toString();

@@ -31,4 +31,14 @@ class HomeViewModal {
     }
     return membersList;
   }
+
+  static addMember(String name) async {
+    Response response = await MemberNetwork.addMember(Member(name: name));
+
+    if (response.statusCode == 201) {
+      print("Added Successfully");
+    } else {
+      print("Member Not Inserted");
+    }
+  }
 }

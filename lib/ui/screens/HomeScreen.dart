@@ -8,6 +8,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController inputController = TextEditingController();
+
+  bool isAdding = false;
+
+  void showAlert() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Add New Member"),
+        content: Container(
+          width: double.maxFinite,
+          child: TextField(
+            controller: inputController,
+            decoration: InputDecoration(
+              labelText: "Enter Member",
+            ),
+          ),
+        ),
+        actions: [
+          FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  isAdding = true;
+                });
+                HomeViewModal.addMember(inputController.text.toString());
+                setState(() {
+                  isAdding = false;
+                });
+              },
+              child: Text("Add")),
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +85,17 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       )),
+      floatingActionButton: FloatingActionButton(
+        child: !isAdding
+            ? Icon(Icons.add)
+            : CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                strokeWidth: 5,
+              ),
+        onPressed: () {
+          showAlert();
+        },
+      ),
     );
   }
 }
