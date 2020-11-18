@@ -44,4 +44,15 @@ class MemberNetwork {
         body: json.encode(member.toJson()));
     return response;
   }
+
+  static Future<Response> deleteMember(String objectId) async {
+    print(objectId);
+    String _apiUrl = kServerUrl + "classes/Members/$objectId";
+    Response response = await delete(_apiUrl, headers: {
+      'X-Parse-Application-Id': kApplicationId,
+      'X-Parse-REST-API-Key': kRestApiKey,
+    });
+
+    return response;
+  }
 }

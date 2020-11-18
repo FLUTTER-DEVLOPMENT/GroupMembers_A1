@@ -50,4 +50,17 @@ class HomeViewModal {
       print("Member Not Updated");
     }
   }
+
+  static deleteMember(String objectId, Function callback) async {
+    Response response = await MemberNetwork.deleteMember(objectId);
+    if (response.statusCode == 200) {
+      print("Member Deleted");
+      if (callback != null) {
+        callback();
+      }
+    } else {
+      print("Member Not Deleted");
+      print(response.body.toString());
+    }
+  }
 }

@@ -104,6 +104,31 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void showDelete(String objectId) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Delete Member"),
+        actions: [
+          FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+                HomeViewModal.deleteMember(objectId, () {
+                  setState(() {});
+                });
+              },
+              child: Text("Delete")),
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,15 +152,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         members[index].name,
                         style: TextStyle(fontSize: 22),
                       ),
-                      trailing: IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.orangeAccent,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          showUpdateAlert(members[index]);
-                        },
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.orangeAccent,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              showUpdateAlert(members[index]);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              showDelete(members[index].objectId);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Divider()
