@@ -41,4 +41,13 @@ class HomeViewModal {
       print("Member Not Inserted");
     }
   }
+
+  static updateMember(Member member) async {
+    Response response = await MemberNetwork.updateMember(member);
+    if (response.statusCode == 200) {
+      print("Update Successfully");
+    } else {
+      print("Member Not Updated");
+    }
+  }
 }

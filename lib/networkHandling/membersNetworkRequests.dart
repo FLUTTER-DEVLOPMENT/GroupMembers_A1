@@ -32,4 +32,16 @@ class MemberNetwork {
 
     return response;
   }
+
+  static Future<Response> updateMember(Member member) async {
+    String _apiUrl = kServerUrl + "classes/Members/${member.objectId}";
+    Response response = await put(_apiUrl,
+        headers: {
+          'X-Parse-Application-Id': kApplicationId,
+          'X-Parse-REST-API-Key': kRestApiKey,
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(member.toJson()));
+    return response;
+  }
 }

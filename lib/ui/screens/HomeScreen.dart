@@ -11,8 +11,9 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController inputController = TextEditingController();
 
   bool isAdding = false;
+  bool isUpdating = false;
 
-  void showAlert() {
+  void showAddAlert() {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -29,20 +30,73 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           FlatButton(
               onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  isAdding = true;
-                });
-                HomeViewModal.addMember(inputController.text.toString());
-                setState(() {
-                  isAdding = false;
-                });
+                if (inputController.text != '') {
+                  Navigator.pop(context);
+                  setState(() {
+                    isAdding = true;
+                  });
+                  HomeViewModal.addMember(inputController.text.toString());
+                  setState(() {
+                    isAdding = false;
+                    inputController.text = '';
+                  });
+                } else {
+                  Navigator.pop(context);
+                }
               },
               child: Text("Add")),
           FlatButton(
             child: Text("Cancel"),
             onPressed: () {
               Navigator.pop(context);
+              setState(() {
+                inputController.text = '';
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showUpdateAlert(Member member) {
+    inputController.text = member.name.toString();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Update Member"),
+        content: Container(
+          width: double.maxFinite,
+          child: TextField(
+            controller: inputController,
+            decoration: InputDecoration(
+              labelText: "Enter Member Name",
+            ),
+          ),
+        ),
+        actions: [
+          FlatButton(
+              onPressed: () {
+                if (inputController.text != '') {
+                  Navigator.pop(context);
+                  Member updatedMember = Member(
+                      name: inputController.text, objectId: member.objectId);
+                  HomeViewModal.updateMember(updatedMember);
+                  setState(() {
+                    inputController.text = "";
+                  });
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              child: Text("Update")),
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                inputController.text = '';
+              });
             },
           ),
         ],
@@ -63,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasData) {
             List<Member> members = snapshot.data;
             return ListView.builder(
+              padding: EdgeInsets.only(bottom: 100),
               itemCount: members.length,
               itemBuilder: (context, index) {
                 return Column(
@@ -71,6 +126,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text(
                         members[index].name,
                         style: TextStyle(fontSize: 22),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.orangeAccent,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          showUpdateAlert(members[index]);
+                        },
                       ),
                     ),
                     Divider()
@@ -93,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 strokeWidth: 5,
               ),
         onPressed: () {
-          showAlert();
+          showAddAlert();
         },
       ),
     );
