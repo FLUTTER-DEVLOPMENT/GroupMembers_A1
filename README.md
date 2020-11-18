@@ -6,7 +6,7 @@ A new Flutter application.
 
 This project is a starting point for a Flutter application.
 
-![](./screenShots/group_members(1).gif)
+![](./screenShots/group_members (1).gif)
 
 
 
